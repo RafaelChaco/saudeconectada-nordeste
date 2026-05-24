@@ -2,20 +2,15 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import sqlite3
 import os
-from datetime import datetime
+from datetime import datetime #Configurações do App para rodar no navegador web e funcionar conforme demandado
 
-# ─────────────────────────────────────────────
-#  Configuração do app
-# ─────────────────────────────────────────────
+
 app = Flask(__name__, static_folder="static")
-CORS(app)  # Permite que o frontend acesse a API
+CORS(app)  #frontend acessa a API
 
 DB_PATH = "prontuario.db"
-
-
-# ─────────────────────────────────────────────
 #  Inicializa o banco de dados SQLite
-# ─────────────────────────────────────────────
+
 def init_db():
     """Cria as tabelas no banco de dados se não existirem."""
     conn = sqlite3.connect(DB_PATH)
@@ -59,8 +54,8 @@ def init_db():
     conn.close()
 
 
-# ─────────────────────────────────────────────
-#  Helper: converte linha do banco em dicionário
+
+#  Helper: converte linha do banco em dicionário (Mais explicação no DOCS)
 # ─────────────────────────────────────────────
 def row_to_dict(cursor, row):
     return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
@@ -92,7 +87,7 @@ def cadastrar_paciente():
             return jsonify({"erro": f"Campo obrigatório ausente: {campo}"}), 400
 
     conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+    cursor = conn.cursor() # conn é a ponte entre python e SQLite
 
     try:
         cursor.execute("""
@@ -117,7 +112,7 @@ def cadastrar_paciente():
         conn.close()
 
     return jsonify({"mensagem": "Paciente cadastrado com sucesso", "id": paciente_id}), 201
-
+# Faz com que todos os dados sejam inseridos, vai dando erro caso não e caso esteja repetindo
 
 @app.route("/api/pacientes/<int:paciente_id>", methods=["GET"])
 def obter_paciente(paciente_id):
@@ -224,5 +219,6 @@ def index():
 if __name__ == "__main__":
     init_db()
     print("✅  Banco de dados inicializado.")
-    print("🚀  Servidor rodando em http://localhost:5000")
+    print("🛞  Servidor rodando em http://localhost:5000")
     app.run(debug=True, port=5000)
+# como rodar
