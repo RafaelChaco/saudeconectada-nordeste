@@ -5,14 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>SaúdeConectada Nordeste — Acessar Dados</title>
+  <title>SaúdeConectada Nordeste — Novo Atendimento</title>
 
   <style>
-
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     body {
@@ -22,12 +21,17 @@
       min-height: 100vh;
     }
 
-    /* ───────── TOPBAR ───────── */
-
     .topbar {
       background: white;
       border-bottom: 1px solid #e2e8f0;
       padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .topbar-left {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -44,64 +48,50 @@
       color: #64748b;
     }
 
-    /* ───────── WRAPPER ───────── */
+    .btn-ver-dados {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .btn-ver-dados:hover {
+      background: #1d4ed8;
+    }
 
     .wrapper {
-      max-width: 1200px;
+      max-width: 900px;
       margin: 40px auto;
       padding: 0 20px 60px;
     }
 
-    /* ───────── HEADER ───────── */
-
     .page-header {
-      margin-bottom: 28px;
-    }
-
-    .title {
-      font-size: 30px;
-      font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    /* ───────── BOTÃO VOLTAR ───────── */
-
-    .btn-voltar {
-      background: white;
-      border: 1px solid #cbd5e1;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      color: #1e293b;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
       margin-bottom: 24px;
-      transition: 0.2s;
     }
 
-    .btn-voltar:hover {
-      background: #f8fafc;
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 4px;
     }
 
-    /* ───────── CARDS ───────── */
+    .page-header p {
+      font-size: 14px;
+      color: #64748b;
+    }
 
     .section-card {
       background: white;
       border: 1px solid #e2e8f0;
       border-radius: 14px;
       overflow: hidden;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(15,23,42,0.06);
+      margin-bottom: 18px;
     }
 
     .section-title {
@@ -115,638 +105,407 @@
       border-bottom: 1px solid #e2e8f0;
     }
 
-    /* ───────── RESULTADO ───────── */
-
-    .resultado {
-      display: none;
-      padding: 24px;
-    }
-
-    .resultado-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .resultado-header h2 {
-      font-size: 22px;
-      font-weight: 600;
-      color: #1e293b;
-    }
-
-    /* ───────── BOTÃO DELETAR ───────── */
-
-    .btn-deletar {
-      background: #dc2626;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .btn-deletar:hover {
-      background: #b91c1c;
-      transform: translateY(-1px);
-    }
-
-    /* ───────── TABELAS ───────── */
-
-    .tabela-wrap {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(15,23,42,0.06);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-    }
-
-    th,
-    td {
-      padding: 16px 20px;
+    .field-row {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 14px 20px;
       border-bottom: 1px solid #f1f5f9;
-      font-size: 14px;
-      text-align: left;
     }
 
-    th {
-      background: #f8fafc;
-      font-weight: 700;
-      font-size: 12px;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
-
-    tr:last-child td {
+    .field-row:last-child {
       border-bottom: none;
     }
 
-    /* ───────── LINHAS ───────── */
+    .field-row label {
+      font-size: 15px;
+      font-weight: 600;
+      padding-top: 10px;
+      color: #334155;
+    }
 
-    .linha-paciente {
-      cursor: pointer;
+    .req {
+      color: #dc2626;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      background: white;
+      color: #1e293b;
       transition: 0.15s;
     }
 
-    .linha-paciente:hover td {
-      background: #f8fafc;
+    textarea {
+      resize: vertical;
+      min-height: 90px;
     }
 
-    .linha-paciente.selecionada td {
-      background: #eff6ff;
+    input::placeholder,
+    textarea::placeholder {
+      color: #94a3b8;
+      font-style: italic;
     }
 
-    /* ───────── BADGES ───────── */
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px 12px;
-      border-radius: 999px;
+    input.error,
+    textarea.error {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.10);
+    }
+
+    .error-msg {
       font-size: 12px;
-      font-weight: 600;
+      color: #dc2626;
+      margin-top: 5px;
+      display: none;
     }
 
-    .badge-sim {
-      background: #dcfce7;
-      color: #166534;
+    .error-msg.show {
+      display: block;
     }
 
-    .badge-nao {
-      background: #fee2e2;
-      color: #991b1b;
+    .vitals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 18px 20px;
     }
 
-    /* ───────── TEXTOS ───────── */
-
-    .secao-titulo {
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #1e293b;
-    }
-
-    .hint {
+    .vital-item label {
+      display: block;
       font-size: 13px;
-      color: #94a3b8;
-      margin-bottom: 16px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 6px;
     }
 
-    .mensagem-vazia {
-      text-align: center;
-      padding: 40px;
-      color: #94a3b8;
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 13px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-primary:disabled { background: #93c5fd; cursor: not-allowed; }
+
+    .btn-secondary {
+      background: white;
+      border: 1px solid #cbd5e1;
+      color: #64748b;
+      padding: 13px 22px;
+      border-radius: 10px;
+      cursor: pointer;
       font-size: 15px;
     }
 
-    /* ───────── MODAL ───────── */
+    .btn-secondary:hover { background: #f8fafc; }
 
-    .overlay {
+    .status-bar {
       display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(15,23,42,0.45);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(3px);
-    }
-
-    .overlay.ativo {
-      display: flex;
-    }
-
-    .modal {
-      background: white;
-      border-radius: 16px;
-      padding: 32px;
-      width: 90%;
-      max-width: 420px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-      text-align: center;
-    }
-
-    .modal h3 {
-      font-size: 22px;
-      margin-bottom: 12px;
-      color: #1e293b;
-    }
-
-    .modal p {
-      color: #64748b;
-      margin-bottom: 26px;
-      line-height: 1.5;
-    }
-
-    .modal-btns {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .btn-cancelar {
-      background: white;
-      border: 1px solid #cbd5e1;
-      padding: 12px 24px;
+      padding: 14px 18px;
       border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .btn-cancelar:hover {
-      background: #f8fafc;
-    }
-
-    .btn-confirmar {
-      background: #dc2626;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 10px;
+      margin-bottom: 20px;
       font-size: 14px;
       font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
     }
 
-    .btn-confirmar:hover {
-      background: #b91c1c;
+    .status-bar.show    { display: block; }
+    .status-bar.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .status-bar.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+    @media (max-width: 640px) {
+      .field-row { grid-template-columns: 1fr; }
+      .vitals-grid { grid-template-columns: 1fr 1fr; }
     }
-
-    /* ───────── RESPONSIVO ───────── */
-
-    @media (max-width: 900px) {
-
-      .resultado-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
-      }
-
-      table {
-        min-width: 800px;
-      }
-
-      .tabela-wrap {
-        overflow-x: auto;
-      }
-    }
-
   </style>
 </head>
 
 <body>
 
-  <!-- TOPBAR -->
-
   <div class="topbar">
-    <span class="topbar-logo">
-      SaúdeConectada Nordeste
-    </span>
-
-    <span class="topbar-sub">
-      — Hospital Regional Santa Cruz
-    </span>
+    <div class="topbar-left">
+      <span class="topbar-logo">SaúdeConectada Nordeste</span>
+      <span class="topbar-sub">— Hospital Regional Santa Cruz</span>
+    </div>
+    <a href="/dados" class="btn-ver-dados">Ver atendimentos →</a>
   </div>
-
-  <!-- CONTEÚDO -->
 
   <div class="wrapper">
 
-    <a href="/" class="btn-voltar">
-      ← Voltar
-    </a>
-
-    <!-- HEADER -->
-
     <div class="page-header">
-
-      <h1 class="title">
-        Acessar Dados
-      </h1>
-
-      <p class="subtitle">
-        Visualize e gerencie os prontuários cadastrados no sistema.
+      <h1>Novo atendimento</h1>
+      <p>
+        Preencha os dados do paciente e os sinais vitais aferidos.
+        Campos marcados com <span class="req">*</span> são obrigatórios.
       </p>
-
     </div>
 
-    <!-- CARD RESULTADO -->
+    <div class="status-bar" id="statusBar"></div>
 
-    <div class="section-card" id="resultado">
+    <!-- IDENTIFICAÇÃO -->
+    <div class="section-card">
+      <div class="section-title">👤 Identificação do paciente</div>
 
-      <div class="section-title">
-        📋 Dados do paciente
+      <div class="field-row">
+        <label for="nome">Nome completo <span class="req">*</span></label>
+        <div>
+          <input
+            id="nome" type="text" maxlength="80"
+            placeholder="Nome do paciente" autocomplete="off"
+            oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÿ\s]/g,'').replace(/\s{2,}/g,' ')"
+          >
+          <div class="error-msg" id="err-nome">Nome obrigatório</div>
+        </div>
       </div>
 
-      <div class="resultado">
+      <div class="field-row">
+        <label for="cpf">CPF <span class="req">*</span></label>
+        <div>
+          <input id="cpf" type="text" inputmode="numeric" maxlength="14"
+            placeholder="000.000.000-00" oninput="formatarCPF(this)">
+          <div class="error-msg" id="err-cpf">CPF inválido</div>
+        </div>
+      </div>
 
-        <div class="resultado-header">
+      <div class="field-row">
+        <label for="nascimento">Data de nascimento <span class="req">*</span></label>
+        <div>
+          <input id="nascimento" type="date" style="max-width:220px;">
+          <div class="error-msg" id="err-nascimento">Data obrigatória</div>
+        </div>
+      </div>
+    </div>
 
-          <h2 id="tituloResultado">
-            Dados do Paciente
-          </h2>
+    <!-- QUEIXA -->
+    <div class="section-card">
+      <div class="section-title">📄 Queixa clínica</div>
 
-          <button
-            class="btn-deletar"
-            onclick="confirmarDelete()"
-          >
-            Deletar paciente
-          </button>
+      <div class="field-row">
+        <label for="queixa">Queixa principal <span class="req">*</span></label>
+        <div>
+          <input id="queixa" type="text" maxlength="120" placeholder="Descreva a queixa principal">
+          <div class="error-msg" id="err-queixa">Campo obrigatório</div>
+        </div>
+      </div>
 
+      <div class="field-row">
+        <label for="observacoes">Observações</label>
+        <textarea id="observacoes" maxlength="500"
+          placeholder="Histórico, alergias, informações adicionais..."></textarea>
+      </div>
+    </div>
+
+    <!-- SINAIS VITAIS -->
+    <div class="section-card">
+      <div class="section-title">❤️ Sinais vitais</div>
+      <div class="vitals-grid">
+
+        <div class="vital-item">
+          <label for="altura">Altura (cm)</label>
+          <input id="altura" type="text" inputmode="numeric" maxlength="3" placeholder="175"
+            oninput="this.value=this.value.replace(/\D/g,'').substring(0,3)">
+          <div class="error-msg" id="err-altura">Altura inválida</div>
         </div>
 
-        <table>
+        <div class="vital-item">
+          <label for="peso">Peso (kg)</label>
+          <input id="peso" type="text" inputmode="decimal" maxlength="5" placeholder="72.5"
+            oninput="this.value=this.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1')">
+          <div class="error-msg" id="err-peso">Peso inválido</div>
+        </div>
 
-          <thead>
-            <tr>
-              <th>Campo</th>
-              <th>Informação</th>
-            </tr>
-          </thead>
+        <div class="vital-item">
+          <label for="pressao">Pressão arterial</label>
+          <input id="pressao" type="text" inputmode="numeric" maxlength="7" placeholder="120/80"
+            oninput="this.value=this.value.replace(/[^0-9/]/g,'').replace(/(\/.*)\//g,'$1')">
+          <div class="error-msg" id="err-pressao">Use o formato 120/80</div>
+        </div>
 
-          <tbody id="corpoResultado"></tbody>
+        <div class="vital-item">
+          <label for="temperatura">Temperatura (°C)</label>
+          <input id="temperatura" type="text" inputmode="decimal" maxlength="4" placeholder="36.5"
+            oninput="this.value=this.value.replace(/[^0-9.]/g,'').replace(/(\..*)\./g,'$1')">
+          <div class="error-msg" id="err-temperatura">Temperatura inválida</div>
+        </div>
 
-        </table>
+        <div class="vital-item">
+          <label for="fc">Freq. cardíaca (bpm)</label>
+          <input id="fc" type="text" inputmode="numeric" maxlength="3" placeholder="72"
+            oninput="this.value=this.value.replace(/\D/g,'').substring(0,3)">
+          <div class="error-msg" id="err-fc">Valor inválido</div>
+        </div>
 
-      </div>
-
-    </div>
-
-    <!-- TABELA GERAL -->
-
-    <div class="secao-titulo">
-      Todos os Pacientes
-    </div>
-
-    <div class="hint">
-      Clique em um paciente para visualizar os detalhes completos.
-    </div>
-
-    <div class="tabela-wrap">
-
-      <table>
-
-        <thead>
-
-          <tr>
-            <th>#</th>
-            <th>Nome</th>
-            <th>CPF</th>
-            <th>Email</th>
-            <th>Telefone</th>
-            <th>Nascimento</th>
-            <th>Prontuário</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="corpoTabela">
-
-          <tr>
-            <td colspan="7" class="mensagem-vazia">
-              Carregando pacientes...
-            </td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-  <!-- MODAL -->
-
-  <div class="overlay" id="overlay">
-
-    <div class="modal">
-
-      <h3>
-        Confirmar exclusão
-      </h3>
-
-      <p>
-        Tem certeza que deseja deletar este paciente?
-        Esta ação não poderá ser desfeita.
-      </p>
-
-      <div class="modal-btns">
-
-        <button
-          class="btn-cancelar"
-          onclick="fecharModal()"
-        >
-          Cancelar
-        </button>
-
-        <button
-          class="btn-confirmar"
-          onclick="deletarPaciente()"
-        >
-          Deletar
-        </button>
+        <div class="vital-item">
+          <label for="spo2">Saturação O₂ (%)</label>
+          <input id="spo2" type="text" inputmode="numeric" maxlength="3" placeholder="98"
+            oninput="this.value=this.value.replace(/\D/g,'').substring(0,3);if(parseInt(this.value)>100)this.value=100;">
+          <div class="error-msg" id="err-spo2">Valor inválido</div>
+        </div>
 
       </div>
+    </div>
 
+    <div class="btn-row">
+      <button class="btn-primary" id="btnSalvar" onclick="enviar()">
+        💾 Salvar atendimento
+      </button>
+      <button class="btn-secondary" onclick="limpar()">Limpar</button>
     </div>
 
   </div>
 
   <script>
-
-    let cpfSelecionado = null;
-
-    function formatarData(data) {
-
-      if (!data) return '—';
-
-      const [ano, mes, dia] = data.split('-');
-
-      return `${dia}/${mes}/${ano}`;
+    // ── Máscara CPF ──────────────────────────────────────────
+    function formatarCPF(input) {
+      let n = input.value.replace(/\D/g, '').substring(0, 11);
+      let f = '';
+      if (n.length > 0)  f += n.substring(0, 3);
+      if (n.length >= 4) f += '.' + n.substring(3, 6);
+      if (n.length >= 7) f += '.' + n.substring(6, 9);
+      if (n.length >= 10) f += '-' + n.substring(9, 11);
+      input.value = f;
     }
 
-    function exibirPaciente(paciente) {
+    function cpfDigits(v) { return v.replace(/\D/g, ''); }
 
-      cpfSelecionado = paciente.cpf;
+    // ── Exibe / esconde erro de campo ───────────────────────
+    function mostrarErro(id, exibir) {
+      const campo = document.getElementById(id);
+      const erro  = document.getElementById('err-' + id);
+      campo.classList.toggle('error', exibir);
+      if (erro) erro.classList.toggle('show', exibir);
+    }
 
-      const pr = paciente.prontuario;
+    // ── Validação completa ───────────────────────────────────
+    function validar() {
+      let valido = true;
 
-      document.getElementById('tituloResultado')
-        .textContent = 'Dados de ' + paciente.nome;
+      const nome      = document.getElementById('nome').value.trim();
+      const cpf       = cpfDigits(document.getElementById('cpf').value);
+      const nascimento= document.getElementById('nascimento').value;
+      const queixa    = document.getElementById('queixa').value.trim();
+      const altura    = parseInt(document.getElementById('altura').value);
+      const peso      = parseFloat(document.getElementById('peso').value);
+      const pressao   = document.getElementById('pressao').value.trim();
+      const temperatura = parseFloat(document.getElementById('temperatura').value);
+      const fc        = parseInt(document.getElementById('fc').value);
+      const spo2      = parseInt(document.getElementById('spo2').value);
 
-      const linhas = [
+      mostrarErro('nome',      !nome);       if (!nome) valido = false;
+      mostrarErro('cpf',       cpf.length !== 11); if (cpf.length !== 11) valido = false;
+      mostrarErro('nascimento',!nascimento); if (!nascimento) valido = false;
+      mostrarErro('queixa',    !queixa);    if (!queixa) valido = false;
 
-        ['Nome', paciente.nome],
-        ['CPF', paciente.cpf],
-        ['Email', paciente.email],
-        ['Telefone', paciente.telefone],
-        ['Endereço', paciente.endereco],
-        ['Data de nascimento', formatarData(paciente.data_nascimento)],
+      const altInv = isNaN(altura)     || altura < 50    || altura > 250;
+      const pesInv = isNaN(peso)       || peso < 1       || peso > 400;
+      const preInv = !/^\d{2,3}\/\d{2,3}$/.test(pressao);
+      const tmpInv = isNaN(temperatura)|| temperatura < 30 || temperatura > 45;
+      const fcInv  = isNaN(fc)         || fc < 20        || fc > 300;
+      const sp2Inv = isNaN(spo2)       || spo2 < 0       || spo2 > 100;
 
-        ['— PRONTUÁRIO —', ''],
+      mostrarErro('altura',      altInv); if (altInv) valido = false;
+      mostrarErro('peso',        pesInv); if (pesInv) valido = false;
+      mostrarErro('pressao',     preInv); if (preInv) valido = false;
+      mostrarErro('temperatura', tmpInv); if (tmpInv) valido = false;
+      mostrarErro('fc',          fcInv);  if (fcInv)  valido = false;
+      mostrarErro('spo2',        sp2Inv); if (sp2Inv) valido = false;
 
-        ['Gênero', pr ? (pr.genero === 'M' ? 'Masculino' : 'Feminino') : '—'],
-        ['Altura', pr ? pr.altura + ' cm' : '—'],
-        ['Peso', pr ? pr.peso + ' kg' : '—'],
-        ['Temperatura', pr ? pr.temperatura + ' °C' : '—'],
-        ['Pressão arterial', pr ? pr.pressao + ' mmHg' : '—'],
-        ['Sintomas', pr ? pr.sintomas : '—'],
-        ['Data da consulta', pr ? formatarData(pr.data) : '—']
+      return valido;
+    }
 
-      ];
+    function setStatus(tipo, mensagem) {
+      const bar = document.getElementById('statusBar');
+      bar.className = 'status-bar show ' + tipo;
+      bar.textContent = mensagem;
+      bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 
-      document.getElementById('corpoResultado').innerHTML = linhas.map(([campo, valor]) =>
+    // ── Envia para o backend ─────────────────────────────────
+    async function enviar() {
+      if (!validar()) {
+        setStatus('error', 'Corrija os campos destacados.');
+        return;
+      }
 
-        campo.startsWith('—')
+      const btn = document.getElementById('btnSalvar');
+      btn.disabled = true;
+      btn.textContent = 'Salvando...';
 
-        ? `
-          <tr>
-            <td colspan="2"
-              style="
-                background:#f8fafc;
-                font-weight:700;
-                color:#64748b;
-                font-size:12px;
-                text-transform:uppercase;
-                letter-spacing:0.07em;
-              ">
-              ${campo}
-            </td>
-          </tr>
-        `
+      const payload = {
+        nome:          document.getElementById('nome').value.trim(),
+        cpf:           document.getElementById('cpf').value,
+        nascimento:    document.getElementById('nascimento').value,
+        queixa:        document.getElementById('queixa').value.trim(),
+        observacoes:   document.getElementById('observacoes').value.trim(),
+        altura:        document.getElementById('altura').value,
+        peso:          document.getElementById('peso').value,
+        pressao:       document.getElementById('pressao').value.trim(),
+        temperatura:   document.getElementById('temperatura').value,
+        freq_cardiaca: document.getElementById('fc').value,
+        spo2:          document.getElementById('spo2').value,
+      };
 
-        : `
-          <tr>
-            <th style="width:35%;">
-              ${campo}
-            </th>
-
-            <td>
-              ${valor || '—'}
-            </td>
-          </tr>
-        `
-
-      ).join('');
-
-      document.querySelector('.resultado').style.display = 'block';
-
-      document.getElementById('resultado')
-        .scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
+      try {
+        const res  = await fetch('/prontuario', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload),
         });
-    }
+        const json = await res.json();
 
-    async function carregarTabela() {
-
-      try {
-
-        const resp =
-          await fetch('/api/prontuarios');
-
-        const dados =
-          await resp.json();
-
-        const corpo =
-          document.getElementById('corpoTabela');
-
-        if (dados.length === 0) {
-
-          corpo.innerHTML = `
-            <tr>
-              <td colspan="7" class="mensagem-vazia">
-                Nenhum paciente cadastrado.
-              </td>
-            </tr>
-          `;
-
-          return;
-        }
-
-        corpo.innerHTML = dados.map(p => `
-
-          <tr
-            class="linha-paciente"
-            data-paciente='${JSON.stringify(p).replace(/'/g, "&#39;")}'
-          >
-
-            <td>${p.id}</td>
-
-            <td>${p.nome}</td>
-
-            <td>${p.cpf}</td>
-
-            <td>${p.email}</td>
-
-            <td>${p.telefone}</td>
-
-            <td>${formatarData(p.data_nascimento)}</td>
-
-            <td>
-
-              <span class="badge ${p.prontuario ? 'badge-sim' : 'badge-nao'}">
-
-                ${p.prontuario ? 'Preenchido' : 'Pendente'}
-
-              </span>
-
-            </td>
-
-          </tr>
-
-        `).join('');
-
-        document.querySelectorAll('.linha-paciente')
-          .forEach(tr => {
-
-            tr.addEventListener('click', function () {
-
-              document.querySelectorAll('.linha-paciente')
-                .forEach(l =>
-                  l.classList.remove('selecionada')
-                );
-
-              this.classList.add('selecionada');
-
-              const paciente =
-                JSON.parse(
-                  this.getAttribute('data-paciente')
-                );
-
-              exibirPaciente(paciente);
-            });
-          });
-
-      } catch {
-
-        document.getElementById('corpoTabela')
-          .innerHTML = `
-            <tr>
-              <td colspan="7" class="mensagem-vazia">
-                Erro ao carregar dados.
-              </td>
-            </tr>
-          `;
-      }
-    }
-
-    function confirmarDelete() {
-
-      if (!cpfSelecionado) return;
-
-      document.getElementById('overlay')
-        .classList.add('ativo');
-    }
-
-    function fecharModal() {
-
-      document.getElementById('overlay')
-        .classList.remove('ativo');
-    }
-
-    async function deletarPaciente() {
-
-      fecharModal();
-
-      try {
-
-        const resp = await fetch(
-          '/api/deletar/' + encodeURIComponent(cpfSelecionado),
-          {
-            method: 'DELETE'
-          }
-        );
-
-        if (resp.ok) {
-
-          document.querySelector('.resultado')
-            .style.display = 'none';
-
-          cpfSelecionado = null;
-
-          await carregarTabela();
-
+        if (res.ok) {
+          setStatus('success', 'Atendimento salvo com sucesso! ID #' + json.id);
+          limpar();
         } else {
-
-          const r = await resp.json();
-
-          alert('Erro ao deletar: ' + r.erro);
+          setStatus('error', 'Erro: ' + (json.erro || 'Falha no servidor.'));
         }
-
-      } catch {
-
-        alert('Erro de conexão com o servidor.');
+      } catch (e) {
+        setStatus('error', 'Sem conexão com o servidor. Tente novamente.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '💾 Salvar atendimento';
       }
     }
 
-    document.getElementById('overlay')
-      .addEventListener('click', function (e) {
-
-        if (e.target === this) {
-          fecharModal();
-        }
+    // ── Limpa o formulário ───────────────────────────────────
+    function limpar() {
+      const ids = ['nome','cpf','nascimento','queixa','observacoes',
+                   'altura','peso','pressao','temperatura','fc','spo2'];
+      ids.forEach(id => {
+        document.getElementById(id).value = '';
+        mostrarErro(id, false);
       });
-
-    carregarTabela();
-
+      const bar = document.getElementById('statusBar');
+      bar.className = 'status-bar';
+      bar.textContent = '';
+    }
   </script>
 
 </body>
-
 </html>
