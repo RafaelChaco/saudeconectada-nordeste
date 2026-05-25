@@ -19,13 +19,10 @@ O objetivo do MVP é criar um módulo simples de prontuário eletrônico para re
 saudeconectada-nordeste/
 ├── backend/
 │   ├── app.py
-│   ├── services.py
-│   ├── validators.py
-│   ├── prontuarios.example.json
+│   ├── prontuarios.json
 │   └── requirements.txt
 ├── frontend/
-│   ├── Atendimentos.html
-│   ├── Informações.html
+│   ├── index.html
 ├── docs/
 │   └── diagnostico.md
 ├── README.md
