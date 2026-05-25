@@ -1,752 +1,763 @@
+<!-- static/index.html -->
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>SaúdeConectada Nordeste — Acessar Dados</title>
+<meta charset="UTF-8">
 
-  <style>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<title>
+SaúdeConectada Nordeste
+</title>
 
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #eef2f7;
-      color: #1e293b;
-      min-height: 100vh;
-    }
+<style>
 
-    /* ───────── TOPBAR ───────── */
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
 
-    .topbar {
-      background: white;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 14px 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+body{
+font-family:"Segoe UI", Arial, sans-serif;
+background:#eef2f7;
+color:#1e293b;
+min-height:100vh;
+}
 
-    .topbar-logo {
-      font-size: 17px;
-      font-weight: 600;
-      color: #2563eb;
-    }
+.topbar{
+background:white;
+border-bottom:1px solid #e2e8f0;
+padding:14px 32px;
+display:flex;
+align-items:center;
+gap:12px;
+}
 
-    .topbar-sub {
-      font-size: 13px;
-      color: #64748b;
-    }
+.topbar-logo{
+font-size:17px;
+font-weight:600;
+color:#2563eb;
+}
 
-    /* ───────── WRAPPER ───────── */
+.topbar-sub{
+font-size:13px;
+color:#64748b;
+}
 
-    .wrapper {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 20px 60px;
-    }
+.wrapper{
+max-width:1000px;
+margin:40px auto;
+padding:0 20px 60px;
+}
 
-    /* ───────── HEADER ───────── */
+.page-header{
+margin-bottom:24px;
+}
 
-    .page-header {
-      margin-bottom: 28px;
-    }
+.page-header h1{
+font-size:26px;
+font-weight:600;
+margin-bottom:4px;
+}
 
-    .title {
-      font-size: 30px;
-      font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 6px;
-    }
+.page-header p{
+font-size:14px;
+color:#64748b;
+}
 
-    .subtitle {
-      color: #64748b;
-      font-size: 14px;
-    }
+.section-card{
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+overflow:hidden;
+margin-bottom:24px;
+}
 
-    /* ───────── BOTÃO VOLTAR ───────── */
+.section-title{
+font-size:12px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:0.07em;
+color:#64748b;
+padding:12px 20px;
+background:#f8fafc;
+border-bottom:1px solid #e2e8f0;
+}
 
-    .btn-voltar {
-      background: white;
-      border: 1px solid #cbd5e1;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      color: #1e293b;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 24px;
-      transition: 0.2s;
-    }
+.field-row{
+display:grid;
+grid-template-columns:220px 1fr;
+gap:16px;
+align-items:start;
+padding:14px 20px;
+border-bottom:1px solid #f1f5f9;
+}
 
-    .btn-voltar:hover {
-      background: #f8fafc;
-    }
+.field-row:last-child{
+border-bottom:none;
+}
 
-    /* ───────── CARDS ───────── */
+.field-row label{
+font-size:15px;
+font-weight:600;
+padding-top:10px;
+color:#334155;
+}
 
-    .section-card {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      overflow: hidden;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(15,23,42,0.06);
-    }
+.req{
+color:#dc2626;
+}
 
-    .section-title {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: #64748b;
-      padding: 12px 20px;
-      background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-    }
+input[type="text"],
+input[type="date"],
+textarea{
 
-    /* ───────── RESULTADO ───────── */
+width:100%;
+padding:10px 14px;
+border:1px solid #cbd5e1;
+border-radius:8px;
+font-size:15px;
+font-family:inherit;
+background:white;
+color:#1e293b;
+}
 
-    .resultado {
-      display: none;
-      padding: 24px;
-    }
+textarea{
+resize:vertical;
+min-height:90px;
+}
 
-    .resultado-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+.vitals-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px;
+padding:18px 20px;
+}
 
-    .resultado-header h2 {
-      font-size: 22px;
-      font-weight: 600;
-      color: #1e293b;
-    }
+.vital-item label{
+display:block;
+font-size:13px;
+font-weight:600;
+color:#64748b;
+margin-bottom:6px;
+}
 
-    /* ───────── BOTÃO DELETAR ───────── */
+.btn-row{
+display:flex;
+gap:12px;
+margin-top:24px;
+}
 
-    .btn-deletar {
-      background: #dc2626;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+.btn-primary{
+background:#2563eb;
+color:white;
+border:none;
+padding:13px 28px;
+font-size:15px;
+font-weight:600;
+border-radius:10px;
+cursor:pointer;
+}
 
-    .btn-deletar:hover {
-      background: #b91c1c;
-      transform: translateY(-1px);
-    }
+.btn-secondary{
+background:#dc2626;
+color:white;
+border:none;
+padding:13px 22px;
+border-radius:10px;
+cursor:pointer;
+}
 
-    /* ───────── TABELAS ───────── */
+.status-bar{
 
-    .tabela-wrap {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(15,23,42,0.06);
-    }
+display:none;
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-    }
+padding:22px;
 
-    th,
-    td {
-      padding: 16px 20px;
-      border-bottom: 1px solid #f1f5f9;
-      font-size: 14px;
-      text-align: left;
-    }
+border-radius:14px;
 
-    th {
-      background: #f8fafc;
-      font-weight: 700;
-      font-size: 12px;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
+margin-bottom:24px;
 
-    tr:last-child td {
-      border-bottom: none;
-    }
+font-size:22px;
 
-    /* ───────── LINHAS ───────── */
+font-weight:800;
 
-    .linha-paciente {
-      cursor: pointer;
-      transition: 0.15s;
-    }
+text-align:center;
+}
 
-    .linha-paciente:hover td {
-      background: #f8fafc;
-    }
+.status-bar.show{
+display:block;
+}
 
-    .linha-paciente.selecionada td {
-      background: #eff6ff;
-    }
+.status-bar.success{
+background:#dcfce7;
+color:#166534;
+border:2px solid #22c55e;
+}
 
-    /* ───────── BADGES ───────── */
+.status-bar.error{
+background:#fee2e2;
+color:#991b1b;
+border:2px solid #ef4444;
+}
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-    }
+table{
+width:100%;
+border-collapse:collapse;
+}
 
-    .badge-sim {
-      background: #dcfce7;
-      color: #166534;
-    }
+th, td{
+padding:14px;
+border-bottom:1px solid #e2e8f0;
+text-align:left;
+}
 
-    .badge-nao {
-      background: #fee2e2;
-      color: #991b1b;
-    }
+th{
+background:#f8fafc;
+font-size:13px;
+}
 
-    /* ───────── TEXTOS ───────── */
+.linha-paciente:hover{
+background:#f8fafc;
+}
 
-    .secao-titulo {
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #1e293b;
-    }
+</style>
 
-    .hint {
-      font-size: 13px;
-      color: #94a3b8;
-      margin-bottom: 16px;
-    }
-
-    .mensagem-vazia {
-      text-align: center;
-      padding: 40px;
-      color: #94a3b8;
-      font-size: 15px;
-    }
-
-    /* ───────── MODAL ───────── */
-
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(15,23,42,0.45);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(3px);
-    }
-
-    .overlay.ativo {
-      display: flex;
-    }
-
-    .modal {
-      background: white;
-      border-radius: 16px;
-      padding: 32px;
-      width: 90%;
-      max-width: 420px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-      text-align: center;
-    }
-
-    .modal h3 {
-      font-size: 22px;
-      margin-bottom: 12px;
-      color: #1e293b;
-    }
-
-    .modal p {
-      color: #64748b;
-      margin-bottom: 26px;
-      line-height: 1.5;
-    }
-
-    .modal-btns {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .btn-cancelar {
-      background: white;
-      border: 1px solid #cbd5e1;
-      padding: 12px 24px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .btn-cancelar:hover {
-      background: #f8fafc;
-    }
-
-    .btn-confirmar {
-      background: #dc2626;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .btn-confirmar:hover {
-      background: #b91c1c;
-    }
-
-    /* ───────── RESPONSIVO ───────── */
-
-    @media (max-width: 900px) {
-
-      .resultado-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
-      }
-
-      table {
-        min-width: 800px;
-      }
-
-      .tabela-wrap {
-        overflow-x: auto;
-      }
-    }
-
-  </style>
 </head>
 
 <body>
 
-  <!-- TOPBAR -->
+<div class="topbar">
 
-  <div class="topbar">
-    <span class="topbar-logo">
-      SaúdeConectada Nordeste
-    </span>
+<span class="topbar-logo">
+SaúdeConectada Nordeste
+</span>
 
-    <span class="topbar-sub">
-      — Hospital Regional Santa Cruz
-    </span>
-  </div>
+<span class="topbar-sub">
+— Hospital Regional Santa Cruz
+</span>
 
-  <!-- CONTEÚDO -->
+</div>
 
-  <div class="wrapper">
+<div class="wrapper">
 
-    <a href="/" class="btn-voltar">
-      ← Voltar
-    </a>
+<div class="page-header">
 
-    <!-- HEADER -->
+<h1>
+Novo atendimento
+</h1>
 
-    <div class="page-header">
+<p>
+Preencha os dados do paciente.
+</p>
 
-      <h1 class="title">
-        Acessar Dados
-      </h1>
+</div>
 
-      <p class="subtitle">
-        Visualize e gerencie os prontuários cadastrados no sistema.
-      </p>
+<div
+class="status-bar"
+id="statusBar"
+></div>
 
-    </div>
+<!-- FORM -->
 
-    <!-- CARD RESULTADO -->
+<div class="section-card">
 
-    <div class="section-card" id="resultado">
+<div class="section-title">
+Identificação
+</div>
 
-      <div class="section-title">
-        📋 Dados do paciente
-      </div>
+<div class="field-row">
 
-      <div class="resultado">
+<label>
+Nome <span class="req">*</span>
+</label>
 
-        <div class="resultado-header">
+<input
+id="nome"
+type="text"
+/>
 
-          <h2 id="tituloResultado">
-            Dados do Paciente
-          </h2>
+</div>
 
-          <button
-            class="btn-deletar"
-            onclick="confirmarDelete()"
-          >
-            Deletar paciente
-          </button>
+<div class="field-row">
 
-        </div>
+<label>
+CPF <span class="req">*</span>
+</label>
 
-        <table>
+<input
+id="cpf"
+type="text"
+/>
 
-          <thead>
-            <tr>
-              <th>Campo</th>
-              <th>Informação</th>
-            </tr>
-          </thead>
+</div>
 
-          <tbody id="corpoResultado"></tbody>
+<div class="field-row">
 
-        </table>
+<label>
+Nascimento <span class="req">*</span>
+</label>
 
-      </div>
+<input
+id="nascimento"
+type="date"
+/>
 
-    </div>
+</div>
 
-    <!-- TABELA GERAL -->
+</div>
 
-    <div class="secao-titulo">
-      Todos os Pacientes
-    </div>
+<!-- QUEIXA -->
 
-    <div class="hint">
-      Clique em um paciente para visualizar os detalhes completos.
-    </div>
+<div class="section-card">
 
-    <div class="tabela-wrap">
+<div class="section-title">
+Queixa clínica
+</div>
 
-      <table>
+<div class="field-row">
 
-        <thead>
+<label>
+Queixa principal
+</label>
 
-          <tr>
-            <th>#</th>
-            <th>Nome</th>
-            <th>CPF</th>
-            <th>Email</th>
-            <th>Telefone</th>
-            <th>Nascimento</th>
-            <th>Prontuário</th>
-          </tr>
+<input
+id="queixa"
+type="text"
+/>
 
-        </thead>
+</div>
 
-        <tbody id="corpoTabela">
+<div class="field-row">
 
-          <tr>
-            <td colspan="7" class="mensagem-vazia">
-              Carregando pacientes...
-            </td>
-          </tr>
+<label>
+Observações
+</label>
 
-        </tbody>
+<textarea
+id="observacoes"
+></textarea>
 
-      </table>
+</div>
 
-    </div>
+</div>
 
-  </div>
+<!-- VITAIS -->
 
-  <!-- MODAL -->
+<div class="section-card">
 
-  <div class="overlay" id="overlay">
+<div class="section-title">
+Sinais vitais:
+</div>
 
-    <div class="modal">
+<div class="vitals-grid">
 
-      <h3>
-        Confirmar exclusão
-      </h3>
+<div class="vital-item">
 
-      <p>
-        Tem certeza que deseja deletar este paciente?
-        Esta ação não poderá ser desfeita.
-      </p>
+<label>
+Pressão
+</label>
 
-      <div class="modal-btns">
+<input
+id="pressao"
+placeholder="120/80"
+/>
 
-        <button
-          class="btn-cancelar"
-          onclick="fecharModal()"
-        >
-          Cancelar
-        </button>
+</div>
 
-        <button
-          class="btn-confirmar"
-          onclick="deletarPaciente()"
-        >
-          Deletar
-        </button>
+<div class="vital-item">
 
-      </div>
+<label>
+Temperatura
+</label>
 
-    </div>
+<input
+id="temperatura"
+/>
 
-  </div>
+</div>
 
-  <script>
+<div class="vital-item">
 
-    let cpfSelecionado = null;
+<label>
+Freq. cardíaca
+</label>
 
-    function formatarData(data) {
+<input
+id="fc"
+/>
 
-      if (!data) return '—';
+</div>
 
-      const [ano, mes, dia] = data.split('-');
+</div>
 
-      return `${dia}/${mes}/${ano}`;
-    }
+</div>
 
-    function exibirPaciente(paciente) {
+<div class="btn-row">
 
-      cpfSelecionado = paciente.cpf;
+<button
+class="btn-primary"
+onclick="enviar()"
+>
+Salvar atendimento
+</button>
 
-      const pr = paciente.prontuario;
+</div>
 
-      document.getElementById('tituloResultado')
-        .textContent = 'Dados de ' + paciente.nome;
+<!-- LISTAGEM -->
 
-      const linhas = [
+<div class="section-card">
 
-        ['Nome', paciente.nome],
-        ['CPF', paciente.cpf],
-        ['Email', paciente.email],
-        ['Telefone', paciente.telefone],
-        ['Endereço', paciente.endereco],
-        ['Data de nascimento', formatarData(paciente.data_nascimento)],
+<div class="section-title">
+Atendimentos registrados
+</div>
 
-        ['— PRONTUÁRIO —', ''],
+<table>
 
-        ['Gênero', pr ? (pr.genero === 'M' ? 'Masculino' : 'Feminino') : '—'],
-        ['Altura', pr ? pr.altura + ' cm' : '—'],
-        ['Peso', pr ? pr.peso + ' kg' : '—'],
-        ['Temperatura', pr ? pr.temperatura + ' °C' : '—'],
-        ['Pressão arterial', pr ? pr.pressao + ' mmHg' : '—'],
-        ['Sintomas', pr ? pr.sintomas : '—'],
-        ['Data da consulta', pr ? formatarData(pr.data) : '—']
+<thead>
 
-      ];
+<tr>
 
-      document.getElementById('corpoResultado').innerHTML = linhas.map(([campo, valor]) =>
+<th>Paciente</th>
+<th>Queixa</th>
+<th>Horário</th>
+<th>Ações</th>
 
-        campo.startsWith('—')
+</tr>
 
-        ? `
-          <tr>
-            <td colspan="2"
-              style="
-                background:#f8fafc;
-                font-weight:700;
-                color:#64748b;
-                font-size:12px;
-                text-transform:uppercase;
-                letter-spacing:0.07em;
-              ">
-              ${campo}
-            </td>
-          </tr>
-        `
+</thead>
 
-        : `
-          <tr>
-            <th style="width:35%;">
-              ${campo}
-            </th>
+<tbody id="corpoTabela">
 
-            <td>
-              ${valor || '—'}
-            </td>
-          </tr>
-        `
+</tbody>
 
-      ).join('');
+</table>
 
-      document.querySelector('.resultado').style.display = 'block';
+</div>
 
-      document.getElementById('resultado')
-        .scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-    }
+</div>
 
-    async function carregarTabela() {
+<script>
 
-      try {
+function setStatus(tipo, mensagem){
 
-        const resp =
-          await fetch('/api/prontuarios');
+const bar =
+document.getElementById('statusBar');
 
-        const dados =
-          await resp.json();
+bar.className =
+'status-bar show ' + tipo;
 
-        const corpo =
-          document.getElementById('corpoTabela');
+bar.textContent = mensagem;
+}
 
-        if (dados.length === 0) {
+function cpfDigits(v){
 
-          corpo.innerHTML = `
-            <tr>
-              <td colspan="7" class="mensagem-vazia">
-                Nenhum paciente cadastrado.
-              </td>
-            </tr>
-          `;
+return v.replace(/\D/g, '');
+}
 
-          return;
-        }
+function validar(){
 
-        corpo.innerHTML = dados.map(p => `
+const nome =
+document.getElementById('nome').value.trim();
 
-          <tr
-            class="linha-paciente"
-            data-paciente='${JSON.stringify(p).replace(/'/g, "&#39;")}'
-          >
+const cpf =
+cpfDigits(
+document.getElementById('cpf').value
+);
 
-            <td>${p.id}</td>
+const nascimento =
+document.getElementById('nascimento').value;
 
-            <td>${p.nome}</td>
+const queixa =
+document.getElementById('queixa').value.trim();
 
-            <td>${p.cpf}</td>
+const pressao =
+document.getElementById('pressao').value.trim();
 
-            <td>${p.email}</td>
+const temperatura =
+parseFloat(
+document.getElementById('temperatura').value
+);
 
-            <td>${p.telefone}</td>
+const fc =
+parseInt(
+document.getElementById('fc').value
+);
 
-            <td>${formatarData(p.data_nascimento)}</td>
+if(
+!nome ||
+!cpf ||
+!nascimento ||
+!queixa ||
+!pressao
+){
 
-            <td>
+setStatus(
+'error',
+'PREENCHA TODOS OS CAMPOS OBRIGATÓRIOS'
+);
 
-              <span class="badge ${p.prontuario ? 'badge-sim' : 'badge-nao'}">
+return false;
+}
 
-                ${p.prontuario ? 'Preenchido' : 'Pendente'}
+if(cpf.length !== 11){
 
-              </span>
+setStatus(
+'error',
+'CPF INVÁLIDO'
+);
 
-            </td>
+return false;
+}
 
-          </tr>
+if(
+isNaN(temperatura) ||
+temperatura < 30 ||
+temperatura > 45
+){
 
-        `).join('');
+setStatus(
+'error',
+'TEMPERATURA INVÁLIDA'
+);
 
-        document.querySelectorAll('.linha-paciente')
-          .forEach(tr => {
+return false;
+}
 
-            tr.addEventListener('click', function () {
+if(
+isNaN(fc) ||
+fc < 20 ||
+fc > 250
+){
 
-              document.querySelectorAll('.linha-paciente')
-                .forEach(l =>
-                  l.classList.remove('selecionada')
-                );
+setStatus(
+'error',
+'FREQUÊNCIA CARDÍACA INVÁLIDA'
+);
 
-              this.classList.add('selecionada');
+return false;
+}
 
-              const paciente =
-                JSON.parse(
-                  this.getAttribute('data-paciente')
-                );
+return true;
+}
 
-              exibirPaciente(paciente);
-            });
-          });
+async function enviar(){
 
-      } catch {
+if(!validar()) return;
 
-        document.getElementById('corpoTabela')
-          .innerHTML = `
-            <tr>
-              <td colspan="7" class="mensagem-vazia">
-                Erro ao carregar dados.
-              </td>
-            </tr>
-          `;
-      }
-    }
+const dados = {
 
-    function confirmarDelete() {
+nome:
+document.getElementById('nome').value,
 
-      if (!cpfSelecionado) return;
+cpf:
+document.getElementById('cpf').value,
 
-      document.getElementById('overlay')
-        .classList.add('ativo');
-    }
+nascimento:
+document.getElementById('nascimento').value,
 
-    function fecharModal() {
+queixa:
+document.getElementById('queixa').value,
 
-      document.getElementById('overlay')
-        .classList.remove('ativo');
-    }
+observacoes:
+document.getElementById('observacoes').value,
 
-    async function deletarPaciente() {
+pressao:
+document.getElementById('pressao').value,
 
-      fecharModal();
+temperatura:
+document.getElementById('temperatura').value,
 
-      try {
+fc:
+document.getElementById('fc').value
+};
 
-        const resp = await fetch(
-          '/api/deletar/' + encodeURIComponent(cpfSelecionado),
-          {
-            method: 'DELETE'
-          }
-        );
+try{
 
-        if (resp.ok) {
+const resposta =
+await fetch('/prontuario', {
 
-          document.querySelector('.resultado')
-            .style.display = 'none';
+method:'POST',
 
-          cpfSelecionado = null;
+headers:{
+'Content-Type':'application/json'
+},
 
-          await carregarTabela();
+body: JSON.stringify(dados)
+});
 
-        } else {
+const resultado =
+await resposta.json();
 
-          const r = await resp.json();
+if(!resposta.ok){
 
-          alert('Erro ao deletar: ' + r.erro);
-        }
+setStatus(
+'error',
+resultado.erro
+);
 
-      } catch {
+return;
+}
 
-        alert('Erro de conexão com o servidor.');
-      }
-    }
+setStatus(
+'success',
+'ATENDIMENTO SALVO COM SUCESSO'
+);
 
-    document.getElementById('overlay')
-      .addEventListener('click', function (e) {
+document
+.querySelectorAll('input, textarea')
+.forEach(c => c.value = '');
 
-        if (e.target === this) {
-          fecharModal();
-        }
-      });
+carregarTabela();
 
-    carregarTabela();
+}catch{
 
-  </script>
+setStatus(
+'error',
+'Erro de conexão com servidor.'
+);
+}
+}
+
+async function carregarTabela(){
+
+const resp =
+await fetch('/prontuarios');
+
+const lista =
+await resp.json();
+
+const corpo =
+document.getElementById('corpoTabela');
+
+corpo.innerHTML = '';
+
+lista.forEach(p => {
+
+corpo.innerHTML += `
+
+<tr class="linha-paciente">
+
+<td>
+<strong>${p.nome}</strong>
+<br>
+<small>CPF: ${p.cpf}</small>
+</td>
+
+<td>
+${p.queixa}
+</td>
+
+<td>
+${p.horario}
+</td>
+
+<td>
+
+<button
+class="btn-primary"
+onclick='mostrarDetalhes(${JSON.stringify(p)})'
+style="
+margin-right:8px;
+padding:10px 14px;
+font-size:13px;
+"
+>
+
+Ver detalhes
+
+</button>
+
+<button
+class="btn-secondary"
+onclick="deletarPaciente('${p.cpf}')"
+>
+
+Apagar
+
+</button>
+
+</td>
+
+</tr>
+`;
+});
+}
+
+function mostrarDetalhes(p){
+
+alert(
+
+'PACIENTE: ' + p.nome +
+
+'\n\nCPF: ' + p.cpf +
+
+'\n\nNASCIMENTO: ' + p.nascimento +
+
+'\n\nQUEIXA PRINCIPAL: ' + p.queixa +
+
+'\n\nOBSERVAÇÕES: ' +
+(p.observacoes || 'Nenhuma observação') +
+
+'\n\n──────── SINAIS VITAIS ────────' +
+
+'\n\nPRESSÃO ARTERIAL: ' +
+(p.pressao || '-') +
+
+'\n\nTEMPERATURA: ' +
+(p.temperatura || '-') + ' °C' +
+
+'\n\nFREQUÊNCIA CARDÍACA: ' +
+(p.fc || '-') + ' bpm'
+
+);
+
+}
+
+async function deletarPaciente(cpf){
+
+const confirmar =
+confirm(
+'Deseja apagar este cadastro?'
+);
+
+if(!confirmar) return;
+
+try{
+
+await fetch(
+'/deletar/' + cpf,
+{
+method:'DELETE'
+}
+);
+
+setStatus(
+'success',
+'Cadastro apagado com sucesso.'
+);
+
+carregarTabela();
+
+}catch{
+
+setStatus(
+'error',
+'Erro ao deletar cadastro.'
+);
+}
+}
+
+carregarTabela();
+
+</script>
 
 </body>
-
 </html>
