@@ -1,765 +1,234 @@
-<!-- static/index.html -->
+# app.py
 
-<!DOCTYPE html>
-<html lang="pt-BR">
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
+import json
+import os
+from datetime import datetime
 
-<head>
+app = Flask(__name__, static_folder='static')
+CORS(app)
 
-<meta charset="UTF-8">
+ARQUIVO = 'prontuarios.json'
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-/>
 
-<title>
-SaúdeConectada Nordeste
-</title>
+# =========================
+# CRIAR JSON SE NÃO EXISTIR
+# =========================
 
-<style>
+if not os.path.exists(ARQUIVO):
 
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
+    with open(ARQUIVO, 'w') as f:
+        json.dump([], f)
+
+
+# =========================
+# FUNÇÕES AUXILIARES
+# =========================
+
+def ler_dados():
+
+    with open(ARQUIVO, 'r') as f:
+        return json.load(f)
+
+
+def salvar_dados(dados):
+
+    with open(ARQUIVO, 'w') as f:
+        json.dump(dados, f, indent=4)
+
+
+# =========================
+# FRONTEND
+# =========================
+
+@app.route('/')
+def home():
+
+    return send_from_directory(
+        'static',
+        'index.html'
+    )
+
+
+# =========================
+# POST /prontuario
+# =========================
+
+@app.route('/prontuario', methods=['POST'])
+def criar_prontuario():
+
+    dados = request.json
+
+    campos = [
+        'nome',
+        'cpf',
+        'nascimento',
+        'queixa',
+        'pressao',
+        'temperatura',
+        'fc'
+    ]
+
+    # valida campos obrigatórios
+    for campo in campos:
+
+        if campo not in dados or str(dados[campo]).strip() == '':
+
+            return jsonify({
+                'erro': f'Campo obrigatório: {campo}'
+            }), 400
+
+    cpf = ''.join(
+        filter(str.isdigit, dados['cpf'])
+    )
+
+    # valida cpf
+    if len(cpf) != 11:
+
+        return jsonify({
+            'erro': 'CPF inválido'
+        }), 400
+
+    # valida temperatura
+    try:
+
+        temperatura = float(
+            dados['temperatura']
+        )
+
+        if temperatura < 30 or temperatura > 45:
+
+            return jsonify({
+                'erro': 'Temperatura inválida'
+            }), 400
+
+    except:
+
+        return jsonify({
+            'erro': 'Temperatura inválida'
+        }), 400
+
+    # valida fc
+    try:
+
+        fc = int(dados['fc'])
+
+        if fc < 20 or fc > 250:
+
+            return jsonify({
+                'erro': 'Frequência cardíaca inválida'
+            }), 400
+
+    except:
+
+        return jsonify({
+            'erro': 'Frequência cardíaca inválida'
+        }), 400
+
+    lista = ler_dados()
+
+    # impede cpf repetido
+    for paciente in lista:
+
+        if paciente['cpf'] == cpf:
+
+            return jsonify({
+                'erro': 'Paciente já cadastrado'
+            }), 409
+
+    novo_atendimento = {
+    "nome": nome,
+    "cpf": cpf,
+    "nascimento": nascimento,
+    "queixa": queixa,
+    "pressao": pressao,
+    "temperatura": temperatura,
+    "fc": fc,
+    "observacoes": observacoes,
+    "horario": datetime.now().strftime("%d/%m/%Y %H:%M")
 }
+    
 
-body{
-font-family:"Segoe UI", Arial, sans-serif;
-background:#eef2f7;
-color:#1e293b;
-min-height:100vh;
-}
+    lista.append(novo)
 
-.topbar{
-background:white;
-border-bottom:1px solid #e2e8f0;
-padding:14px 32px;
-display:flex;
-align-items:center;
-gap:12px;
-}
+    salvar_dados(lista)
 
-.topbar-logo{
-font-size:17px;
-font-weight:600;
-color:#2563eb;
-}
+    return jsonify({
+        'mensagem': 'Prontuário salvo'
+    }), 201
 
-.topbar-sub{
-font-size:13px;
-color:#64748b;
-}
 
-.wrapper{
-max-width:1000px;
-margin:40px auto;
-padding:0 20px 60px;
-}
+# =========================
+# GET /prontuarios
+# =========================
 
-.page-header{
-margin-bottom:24px;
-}
+@app.route('/prontuarios', methods=['GET'])
+def listar_prontuarios():
 
-.page-header h1{
-font-size:26px;
-font-weight:600;
-margin-bottom:4px;
-}
+    return jsonify(
+        ler_dados()
+    ), 200
 
-.page-header p{
-font-size:14px;
-color:#64748b;
-}
 
-.section-card{
-background:white;
-border:1px solid #e2e8f0;
-border-radius:14px;
-overflow:hidden;
-margin-bottom:24px;
-}
+# =========================
+# GET /prontuarios/<cpf>
+# =========================
 
-.section-title{
-font-size:12px;
-font-weight:700;
-text-transform:uppercase;
-letter-spacing:0.07em;
-color:#64748b;
-padding:12px 20px;
-background:#f8fafc;
-border-bottom:1px solid #e2e8f0;
-}
+@app.route('/prontuarios/<cpf>', methods=['GET'])
+def buscar_paciente(cpf):
 
-.field-row{
-display:grid;
-grid-template-columns:220px 1fr;
-gap:16px;
-align-items:start;
-padding:14px 20px;
-border-bottom:1px solid #f1f5f9;
-}
+    cpf_limpo = ''.join(
+        filter(str.isdigit, cpf)
+    )
 
-.field-row:last-child{
-border-bottom:none;
-}
+    lista = ler_dados()
 
-.field-row label{
-font-size:15px;
-font-weight:600;
-padding-top:10px;
-color:#334155;
-}
+    for paciente in lista:
 
-.req{
-color:#dc2626;
-}
+        if paciente['cpf'] == cpf_limpo:
 
-input[type="text"],
-input[type="date"],
-textarea{
+            return jsonify(
+                paciente
+            ), 200
 
-width:100%;
-padding:10px 14px;
-border:1px solid #cbd5e1;
-border-radius:8px;
-font-size:15px;
-font-family:inherit;
-background:white;
-color:#1e293b;
-}
+    return jsonify({
+        'erro': 'Paciente não encontrado'
+    }), 404
 
-textarea{
-resize:vertical;
-min-height:90px;
-}
 
-.vitals-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:16px;
-padding:18px 20px;
-}
+# =========================
+# DELETE
+# =========================
 
-.vital-item label{
-display:block;
-font-size:13px;
-font-weight:600;
-color:#64748b;
-margin-bottom:6px;
-}
+@app.route('/deletar/<cpf>', methods=['DELETE'])
+def deletar(cpf):
 
-.btn-row{
-display:flex;
-gap:12px;
-margin-top:24px;
-}
+    cpf_limpo = ''.join(
+        filter(str.isdigit, cpf)
+    )
 
-.btn-primary{
-background:#2563eb;
-color:white;
-border:none;
-padding:13px 28px;
-font-size:15px;
-font-weight:600;
-border-radius:10px;
-cursor:pointer;
-}
+    lista = ler_dados()
 
-.btn-secondary{
-background:#dc2626;
-color:white;
-border:none;
-padding:13px 22px;
-border-radius:10px;
-cursor:pointer;
-}
+    nova_lista = [
 
-.status-bar{
+        p for p in lista
+        if p['cpf'] != cpf_limpo
+    ]
 
-display:none;
+    salvar_dados(nova_lista)
 
-padding:22px;
+    return jsonify({
+        'mensagem': 'Paciente deletado'
+    }), 200
 
-border-radius:14px;
 
-margin-bottom:24px;
+# =========================
 
-font-size:22px;
+if __name__ == '__main__':
 
-font-weight:800;
+    print(
+        '🚀 Servidor rodando em http://127.0.0.1:5000'
+    )
 
-text-align:center;
-}
-
-.status-bar.show{
-display:block;
-}
-
-.status-bar.success{
-background:#dcfce7;
-color:#166534;
-border:2px solid #22c55e;
-}
-
-.status-bar.error{
-background:#fee2e2;
-color:#991b1b;
-border:2px solid #ef4444;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-th, td{
-padding:14px;
-border-bottom:1px solid #e2e8f0;
-text-align:left;
-}
-
-th{
-background:#f8fafc;
-font-size:13px;
-}
-
-.linha-paciente:hover{
-background:#f8fafc;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="topbar">
-
-<span class="topbar-logo">
-SaúdeConectada Nordeste
-</span>
-
-<span class="topbar-sub">
-— Hospital Regional Santa Cruz
-</span>
-
-</div>
-
-<div class="wrapper">
-
-<div class="page-header">
-
-<h1>
-Novo atendimento
-</h1>
-
-<p>
-Preencha os dados do paciente.
-</p>
-
-</div>
-
-<div
-class="status-bar"
-id="statusBar"
-></div>
-
-<!-- FORM -->
-
-<div class="section-card">
-
-<div class="section-title">
-Identificação
-</div>
-
-<div class="field-row">
-
-<label>
-Nome <span class="req">*</span>
-</label>
-
-<input
-id="nome"
-type="text"
-/>
-
-</div>
-
-<div class="field-row">
-
-<label>
-CPF <span class="req">*</span>
-</label>
-
-<input
-id="cpf"
-type="text"
-/>
-
-</div>
-
-<div class="field-row">
-
-<label>
-Nascimento <span class="req">*</span>
-</label>
-
-<input
-id="nascimento"
-type="date"
-/>
-
-</div>
-
-</div>
-
-<!-- QUEIXA -->
-
-<div class="section-card">
-
-<div class="section-title">
-Queixa clínica
-</div>
-
-<div class="field-row">
-
-<label>
-Queixa principal
-</label>
-
-<input
-id="queixa"
-type="text"
-/>
-
-</div>
-
-<div class="field-row">
-
-<label>
-Observações
-</label>
-
-<textarea
-id="observacoes"
-></textarea>
-
-</div>
-
-</div>
-
-<!-- VITAIS -->
-
-<div class="section-card">
-
-<div class="section-title">
-Sinais vitais:
-</div>
-
-<div class="vitals-grid">
-
-<div class="vital-item">
-
-<label>
-Pressão
-</label>
-
-<input
-id="pressao"
-placeholder="mmHg"
-/>
-
-</div>
-
-<div class="vital-item">
-
-<label>
-Temperatura
-</label>
-
-<input
-id="temperatura"
-placeholder="°C"
-/>
-
-</div>
-
-<div class="vital-item">
-
-<label>
-Freq. cardíaca
-</label>
-
-<input
-id="fc"
-placeholder="BPM"
-/>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="btn-row">
-
-<button
-class="btn-primary"
-onclick="enviar()"
->
-Salvar atendimento
-</button>
-
-</div>
-
-<!-- LISTAGEM -->
-
-<div class="section-card">
-
-<div class="section-title">
-Atendimentos registrados
-</div>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Paciente</th>
-<th>Queixa</th>
-<th>Horário</th>
-<th>Ações</th>
-
-</tr>
-
-</thead>
-
-<tbody id="corpoTabela">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<script>
-
-function setStatus(tipo, mensagem){
-
-const bar =
-document.getElementById('statusBar');
-
-bar.className =
-'status-bar show ' + tipo;
-
-bar.textContent = mensagem;
-}
-
-function cpfDigits(v){
-
-return v.replace(/\D/g, '');
-}
-
-function validar(){
-
-const nome =
-document.getElementById('nome').value.trim();
-
-const cpf =
-cpfDigits(
-document.getElementById('cpf').value
-);
-
-const nascimento =
-document.getElementById('nascimento').value;
-
-const queixa =
-document.getElementById('queixa').value.trim();
-
-const pressao =
-document.getElementById('pressao').value.trim();
-
-const temperatura =
-parseFloat(
-document.getElementById('temperatura').value
-);
-
-const fc =
-parseInt(
-document.getElementById('fc').value
-);
-
-if(
-!nome ||
-!cpf ||
-!nascimento ||
-!queixa ||
-!pressao
-){
-
-setStatus(
-'error',
-'PREENCHA TODOS OS CAMPOS OBRIGATÓRIOS'
-);
-
-return false;
-}
-
-if(cpf.length !== 11){
-
-setStatus(
-'error',
-'CPF INVÁLIDO'
-);
-
-return false;
-}
-
-if(
-isNaN(temperatura) ||
-temperatura < 30 ||
-temperatura > 45
-){
-
-setStatus(
-'error',
-'TEMPERATURA INVÁLIDA'
-);
-
-return false;
-}
-
-if(
-isNaN(fc) ||
-fc < 20 ||
-fc > 250
-){
-
-setStatus(
-'error',
-'FREQUÊNCIA CARDÍACA INVÁLIDA'
-);
-
-return false;
-}
-
-return true;
-}
-
-async function enviar(){
-
-if(!validar()) return;
-
-const dados = {
-
-nome:
-document.getElementById('nome').value,
-
-cpf:
-document.getElementById('cpf').value,
-
-nascimento:
-document.getElementById('nascimento').value,
-
-queixa:
-document.getElementById('queixa').value,
-
-observacoes:
-document.getElementById('observacoes').value,
-
-pressao:
-document.getElementById('pressao').value,
-
-temperatura:
-document.getElementById('temperatura').value,
-
-fc:
-document.getElementById('fc').value
-};
-
-try{
-
-const resposta =
-await fetch('/prontuario', {
-
-method:'POST',
-
-headers:{
-'Content-Type':'application/json'
-},
-
-body: JSON.stringify(dados)
-});
-
-const resultado =
-await resposta.json();
-
-if(!resposta.ok){
-
-setStatus(
-'error',
-resultado.erro
-);
-
-return;
-}
-
-setStatus(
-'success',
-'ATENDIMENTO SALVO COM SUCESSO'
-);
-
-document
-.querySelectorAll('input, textarea')
-.forEach(c => c.value = '');
-
-carregarTabela();
-
-}catch{
-
-setStatus(
-'error',
-'Erro de conexão com servidor.'
-);
-}
-}
-
-async function carregarTabela(){
-
-const resp =
-await fetch('/prontuarios');
-
-const lista =
-await resp.json();
-
-const corpo =
-document.getElementById('corpoTabela');
-
-corpo.innerHTML = '';
-
-lista.forEach(p => {
-
-corpo.innerHTML += `
-
-<tr class="linha-paciente">
-
-<td>
-<strong>${p.nome}</strong>
-<br>
-<small>CPF: ${p.cpf}</small>
-</td>
-
-<td>
-${p.queixa}
-</td>
-
-<td>
-${p.horario}
-</td>
-
-<td>
-
-<button
-class="btn-primary"
-onclick='mostrarDetalhes(${JSON.stringify(p)})'
-style="
-margin-right:8px;
-padding:10px 14px;
-font-size:13px;
-"
->
-
-Ver detalhes
-
-</button>
-
-<button
-class="btn-secondary"
-onclick="deletarPaciente('${p.cpf}')"
->
-
-Apagar
-
-</button>
-
-</td>
-
-</tr>
-`;
-});
-}
-
-function mostrarDetalhes(p){
-
-alert(
-
-'PACIENTE: ' + p.nome +
-
-'\n\nCPF: ' + p.cpf +
-
-'\n\nNASCIMENTO: ' + p.nascimento +
-
-'\n\nQUEIXA PRINCIPAL: ' + p.queixa +
-
-'\n\nOBSERVAÇÕES: ' +
-(p.observacoes || 'Nenhuma observação') +
-
-'\n\n──────── SINAIS VITAIS ────────' +
-
-'\n\nPRESSÃO ARTERIAL: ' +
-(p.pressao || '-') +
-
-'\n\nTEMPERATURA: ' +
-(p.temperatura || '-') + ' °C' +
-
-'\n\nFREQUÊNCIA CARDÍACA: ' +
-(p.fc || '-') + ' bpm'
-
-);
-
-}
-
-async function deletarPaciente(cpf){
-
-const confirmar =
-confirm(
-'Deseja apagar este cadastro?'
-);
-
-if(!confirmar) return;
-
-try{
-
-await fetch(
-'/deletar/' + cpf,
-{
-method:'DELETE'
-}
-);
-
-setStatus(
-'success',
-'Cadastro apagado com sucesso.'
-);
-
-carregarTabela();
-
-}catch{
-
-setStatus(
-'error',
-'Erro ao deletar cadastro.'
-);
-}
-}
-
-carregarTabela();
-
-</script>
-
-</body>
-</html>
+    app.run(debug=True)
